@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title>varってあったりなかったりするけど必要なの？</title>
+	<link rel="stylesheet" href="../../cmn/css/bootstrap.css">
+	<link rel="stylesheet" href="../../cmn/css/docs.min.css">
+</head>
+<body>
+	<div class="bs-docs-header" id="content" tabindex="-1">
+		<div class="container">
+			<h1>varってあったりなかったりするけど必要なの？</h1>
+		</div>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<p>変数を宣言したいとき、 『 var hoge; 』 みたいに書くことがあると思います。javascriptでは、様々な書き方で変数の宣言ができます。</p>
+				<div class="highlight">
+					<pre><code class="language-javascripts" data-lang="javascripts">
+					<span class="nt">&lt;script&gt;</span><br>
+						<span class="s">var</span> red;<br>
+						<span class="s">var</span> green = 0;<br>
+						blue = 1;<br>
+						<span class="s">var</span> r,g,b,w; <br>
+						<span class="s">var</span> c = 1,m = 2,y = 3,k = 4; <br>
+						<span class="s">var</span> fn_1 function(){...}<br>
+						fn_2 function(){...}<br><br>
+					<span class="nt">&lt;/script&gt;</span></code></pre>
+				</div>
+				<p>全て、正しい宣言方法です。適当に組んでも動くので、良くも悪くも導入しやすいという点では優れているjavascriptです。<br><br>しかし、この自由すぎる宣言方法が原因で、たまにエラーが出ることがあります。知らないまま何となくデバッグするケースが多かったので、今回少しまとめてみました。</p>
+				<h2 id="overview" class="page-header">目次<a class="anchorjs-link" href="#overview"><span class="anchorjs-icon"></span></a></h2>
+				<ul>
+					<li>varとは</li>
+					<li>変数宣言の違い</li>
+					<li>関数宣言の違い</li>
+					<li>まとめ</li>
+				</ul>
+				<h2 id="overview" class="page-header">varとは<a class="anchorjs-link" href="#overview"><span class="anchorjs-icon"></span></a></h2>
+				<p>"variable"の略語です。<br>入る値は、数値（40や1,574）、論理地（trueやfalse）、文字列（"ほげほげ"）、その他（null）、オブジェクト等、いろいろ入ります。</p>
+				<h2 id="overview" class="page-header">変数宣言の違い<a class="anchorjs-link" href="#overview"><span class="anchorjs-icon"></span></a></h2>
+				<div class="highlight">
+					<pre><code class="language-javascripts" data-lang="javascripts">
+					<span class="nt">&lt;script&gt;</span><br>
+						<span class="s">var</span> red;<br>
+						blue = 1;<br>
+					<span class="nt">&lt;/script&gt;</span></code></pre>
+				</div>
+				<p>上記、どちらも正しい宣言方法です。では何が違うのでしょうか。これを知るには、まずそもそもの変数について知る必要があります。</p>
+				<h3>グローバル変数とローカル変数</h3>
+				<p>多くの言語で使われている考え方ですが、宣言方法は大きく分けてこの二つにわけられます。</p>
+				<div class="highlight">
+					<pre><code class="language-javascripts" data-lang="javascripts">
+					<span class="nt">&lt;script&gt;</span><br>
+						<span class="s">var</span> red;<span class="c1">&nbsp;// グローバル変数</span><br>
+						fn_1 function(){ <br>
+						&nbsp;&nbsp;<span class="s">var</span> blue;<span class="c1">&nbsp;// ローカル変数</span><br>
+						} <br>
+					<span class="nt">&lt;/script&gt;</span></code></pre>
+				</div>
+				<p>"red"がグローバル変数と呼ばれ、"blue"がローカル変数と呼ばれています。グローバル変数はプログラム内の全ての関数で参照することができ、ローカル変数は、その関数内でしか参照できず、関数から出た後には、消失する仕組みになっています。 <br>プログラム内で共通の変数を使いたいときは、グローバル変数。そうでない場合は、ローカル変数で定義するといった風に使用する感じですね。ちなみに、ローカル変数⇒グローバル変数という順で参照されるため、理論上ローカル変数のほうがアクセス速度が速いです。なので、何でもかんでもグローバル変数にして良いわけではないのです。</p>
+				<h3>結局何が違うのか</h3>
+				<p>では本題に戻ります。お察しの通り、違いはグローバル変数かローカル変数かになります。</p>
+				<div class="highlight">
+					<pre><code class="language-javascripts" data-lang="javascripts">
+					<span class="nt">&lt;script&gt;</span><br>
+						<span class="s">var</span> red;<span class="c1">&nbsp;// グローバル変数</span><br>
+						fn_1 function(){ <br>
+						&nbsp;&nbsp;red;<span class="c1">&nbsp;// グローバル変数</span><br>
+						} <br>
+					<span class="nt">&lt;/script&gt;</span></code></pre>
+				</div>
+				<p>こういうことですね。関数内でもvarを省略してしまうとグローバル変数になってしまいます。稀なケースではありますが、上記のように変数名が同じだった場合はおかしなことになってしまいますね。</p>
+				<h2>関数宣言の違い</h2>
+				<p>関数宣言にも違いがあります。</p>
+				<div class="highlight">
+					<pre><code class="language-javascripts" data-lang="javascripts">
+					<span class="nt">&lt;script&gt;</span><br>
+					hoge();<br>
+					<span class="s">var</span> hoge = function(){ ... }<br><br>
+					<span class="nt">&lt;/script&gt;</span></code></pre>
+				</div>
+				<p>上記だとエラーになります。</p>
+				<div class="highlight">
+					<pre><code class="language-javascripts" data-lang="javascripts">
+					<span class="nt">&lt;script&gt;</span><br>
+					hoge();<br>
+					function hoge(){ ... }<br><br>
+					<span class="nt">&lt;/script&gt;</span></code></pre>
+				</div>
+				<p>こちらは動きます。varを付けると、代入文の実行時に関数が定義されるので実行と定義の順序に気を付けなければなりませんね。</p>
+				<h2>まとめ</h2>
+				<ul>
+					<li>varは基本つけたほうが良い</li>
+					<li>function hoge(){...} と var hoge = function(){...} では、生成されるタイミングが違う</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<footer class="bs-docs-footer" role="contentinfo">
+		<div class="container"><small>yhg-kn</small></div>
+	</footer>
+</body>
+</html>
