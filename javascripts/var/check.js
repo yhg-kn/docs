@@ -124,6 +124,139 @@
 					}
 
 				});
+
+				// ダミーリンクチェック
+				if($('a').attr('href') == '#'){
+					$('.chkWrap table').append('<tr class="dummylinknav"><th colspan="2">ダミーリンクチェック</th></tr>');
+					var navBtn = '<p class="chkWrap-btn chkWrap-nav"><span>ダミーリンクチェックへ</span></p>';
+					$('.chkWrap').append(navBtn);
+				}
+				$('a[href]').each(function(){
+					var dummyAnc = $(this).attr('href');
+					var ancTxt = $(this).html();
+					var dummyAncWrap = '<tr><td class="chkWrap-leftCol bold-red">' + ancTxt + '</td><td class="chkWrap-rightCol bold-red">' + dummyAnc + '</td></tr>';
+					if(dummyAnc == '#'){
+						$('.chkWrap table').append(dummyAncWrap);
+					}
+				});
+
+				// ダミーリンクチェックエリアへスクロール
+				$('.chkWrap-nav').click(function(){
+					var position = $('.dummylinknav').offset().top;
+					$('body,html').animate({scrollTop:position}, 400, 'swing');
+				});
+
+				// プリントボタンの設置
+				var prtbtn = '<p class="chkWrap-btn chkWrap-print"><span>印刷する</span></p>';
+				$('.chkWrap').append(prtbtn);
+				$('.chkWrap-print').click(function(){
+					ga('send', 'event', 'print', 'click', siteDomain);
+					print();
+				});
+
+				// メール送信ボタンの設置
+				var pageTtl = document.title;
+				var currentURL = location.href;
+				var returnTag = '■■■■';
+				var mailbtn = '<p class="chkWrap-btn chkWrap-mail"><a href="mailto:?subject=チェックのお願い&amp;body=' + pageTtl + returnTag + currentURL +'">送信する</a></p>';
+				$('.chkWrap').append(mailbtn);
+				$('.chkWrap-mail').click(function(){
+					ga('send', 'event', 'mail', 'click', siteDomain);
+				});
+
+				//整形用CSS
+				$('.chkWrap').css({
+					position: 'absolute',
+					top: 0,
+					left: 0,
+					width: winW,
+					background: '#fafafa',
+					fontFamily: '"メイリオ"',
+					zIndex: 1000000
+				});
+				$('.chkWrap .bold-red').css({
+					fontWeight: 'bold',
+					color: '#f00'
+				});
+				$('.chkWrap li').css({
+					listStyle: 'none'
+				});
+				$('.chkWrap table').css({
+					width: '100%',
+					borderCollapse: 'collapse'
+				});
+				$('.chkWrap table tr').css({
+					overflow: 'auto'
+				});
+				$('.chkWrap table tr:odd').css({
+					background: '#eaeaea'
+				});
+				$('.chkWrap table th').css({
+					padding: '5px',
+					borderTop: '5px solid #cccccc',
+					background: '#f2dede',
+					textAlign: 'center',
+					verticalAlign: 'middle',
+					fontFamily: '"メイリオ"',
+					fontSize: '16px'
+				});
+				$('.chkWrap table td').css({
+					width: winW / 2 + 'px',
+					padding: '5px',
+					textAlign: 'left',
+					verticalAlign: 'middle',
+					fontFamily: '"メイリオ"',
+					fontSize: '14px'
+				});
+				$('.chkWrap-leftCol').css({
+					textAlign: 'right'
+				});
+				$('.chkWrap-leftCol-div').css({
+					width: winW / 2 + 'px',
+					overflow: 'auto'
+				});
+				$('.chkWrap-leftCol-div img').css({
+					display: 'inline',
+					width: 'auto',
+					height: 'auto'
+				});
+				$('.chkWrap-btn').css({
+					position: 'fixed',
+					left: '50px',
+					borderRadius: '3px',
+					color: '#ffffff',
+					opacity: '0.6',
+					cursor: 'pointer'
+				});
+				$('.chkWrap-print').css({
+					top: '20px',
+					background: '#3366CC',
+				});
+				$('.chkWrap-mail').css({
+					top: '70px',
+					background: '#3366CC',
+				});
+				$('.chkWrap-nav').css({
+					top: '120px',
+					background: '#3366CC',
+				});
+				$('.chkWrap-btn a,.chkWrap-btn span').css({
+					display: 'block',
+					padding: '10px',
+					color: '#ffffff',
+					textDecoration: 'none'
+				});
+
+				// 印刷用のCSS
+				var printCSS = '<style rel="stylesheet" media="print">.chkWrap table{width:1040px !important;}.chkWrap td,.chkWrap td>div{width:540px !important;}.chkWrap-btn{display:none;}</style>';
+				$('.chkWrap').append(printCSS);
+
+				var gas = d.createElement('script');
+				gas.type = 'text/javascript';
+				gas.src = 'https://kannart.jp/tool/eazyCheck/ga.js';
+				gas.id = 'chkGA-js';
+				$('body').append(gas);
+
 			}
 			window.scrollTo(0, 0);
 		})(jQuery);
